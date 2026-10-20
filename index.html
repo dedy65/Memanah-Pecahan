@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🏹 Archery Fraction — Bird Hunt · SD Kelas 4</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    font-family:'Segoe UI',system-ui,-apple-system,'Trebuchet MS',sans-serif;
+    background:linear-gradient(180deg,#87ceeb 0%,#b3e5fc 45%,#d7f0c8 100%);
+    min-height:100vh;display:flex;align-items:center;justify-content:center;
+    padding:14px;color:#14432a;-webkit-tap-highlight-color:transparent;
+  }
+  .screen{display:none;width:100%;max-width:920px;}
+  .screen.active{display:block;animation:fadeIn .35s ease;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+
+  .card{
+    background:rgba(255,255,255,.95);
+    border-radius:28px;
+    box-shadow:0 22px 55px rgba(16,72,52,.25);
+    padding:24px;
+  }
+
+  /* ---------- TOMBOL ---------- */
+  .btn{
+    border:none;cursor:pointer;font-family:inherit;font-weight:800;font-size:16px;
+    padding:14px 28px;border-radius:999px;color:#fff;
+    transition:transform .15s ease, box-shadow .15s ease;
+    display:inline-flex;align-items:center;gap:8px;justify-content:center;
+  }
+  .btn:hover{transform:translateY(-3px);}
+  .btn:active{transform:translateY(4px);}
+  .btn-materi{background:linear-gradient(135deg,#42a5f5,#1e88e5);box-shadow:0 7px 0 #1565c0;}
+  .btn-materi:active{box-shadow:0 2px 0 #1565c0;}
+  .btn-play{background:linear-gradient(135deg,#66bb6a,#43a047);box-shadow:0 7px 0 #2e7d32;}
+  .btn-play:active{box-shadow:0 2px 0 #2e7d32;}
+  .btn-ghost{background:linear-gradient(135deg,#90a4ae,#607d8b);box-shadow:0 7px 0 #455a64;}
+  .btn-ghost:active{box-shadow:0 2px 0 #455a64;}
+
+  /* ---------- START (SAMPUL) ---------- */
+  .start{text-align:center;padding:34px 20px 26px;}
+  .archery-logo{font-size:84px;line-height:1;animation:bob 2.4s ease-in-out infinite;display:inline-block;}
+  @keyframes bob{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-14px) rotate(3deg)}}
+  .start h1{
+    font-size:clamp(30px,6vw,46px);letter-spacing:-1px;margin:8px 0 6px;
+    background:linear-gradient(135deg,#1b5e20,#66bb6a,#43a047);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .start p.sub{font-size:16px;color:#4e6b5c;margin-bottom:16px;font-weight:600;}
+
+  .grade-badge{
+    display:inline-flex;align-items:center;gap:8px;
+    background:linear-gradient(135deg,#fff9c4,#ffe082);
+    color:#e65100;font-weight:900;font-size:15px;
+    padding:9px 22px;border-radius:999px;
+    border:2px dashed #f9a825;margin-bottom:18px;
+    box-shadow:0 6px 16px rgba(249,168,37,.28);
+  }
+
+  .level-chips{display:flex;gap:10px;justify-content:center;margin-bottom:16px;flex-wrap:wrap;}
+  .chip{
+    display:inline-flex;align-items:center;gap:6px;
+    background:#fff;border-radius:999px;padding:8px 18px;
+    font-weight:800;font-size:13.5px;box-shadow:0 5px 14px rgba(0,0,0,.09);
+  }
+  .chip.easy{color:#2e7d32;}
+  .chip.medium{color:#e65100;}
+
+  .fresh-note{
+    display:inline-block;font-size:13px;font-weight:800;
+    color:#2e7d32;background:#e8f5e9;
+    padding:7px 16px;border-radius:999px;margin-bottom:22px;
+    border:1.5px solid #a5d6a7;
+  }
+
+  .start-btns{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;}
+  .start-btns .btn{font-size:18px;padding:17px 36px;}
+
+  .credit{
+    margin-top:26px;padding-top:18px;
+    border-top:2px dashed #ce93d8;
+    font-size:14px;font-weight:700;color:#7b1fa2;
+    letter-spacing:.4px;
+  }
+  .credit b{
+    display:inline-block;
+    background:linear-gradient(135deg,#ba68c8,#8e24aa);
+    color:#fff;padding:4px 14px;border-radius:999px;
+    margin-left:6px;font-size:14px;letter-spacing:1px;
+    box-shadow:0 4px 10px rgba(142,36,170,.3);
+  }
+  .credit-icon{font-size:15px;margin-right:4px;}
+
+  /* ---------- MATERI ---------- */
+  .materi-card{max-height:90vh;display:flex;flex-direction:column;}
+  .materi-card h2{
+    font-size:23px;color:#1b5e20;margin-bottom:6px;
+    display:flex;align-items:center;gap:10px;
+  }
+  .materi-body{overflow-y:auto;padding-right:8px;margin:14px 0 18px;flex:1;}
+  .materi-body::-webkit-scrollbar{width:9px;}
+  .materi-body::-webkit-scrollbar-thumb{background:#a5d6a7;border-radius:9px;}
+  .materi-body section{margin-bottom:22px;}
+  .materi-body h3{
+    font-size:17px;color:#2e7d32;margin-bottom:9px;
+    border-left:5px solid #66bb6a;padding-left:11px;
+  }
+  .materi-body p{font-size:15px;line-height:1.65;color:#33513f;margin-bottom:8px;}
+  .materi-body ul{margin-left:20px;font-size:15px;line-height:1.85;color:#33513f;}
+  .materi-body li b{color:#1b5e20;}
+  .box{
+    background:#f1f8e9;border:2px dashed #aed581;border-radius:14px;
+    padding:13px 16px;margin:10px 0;font-size:15px;line-height:1.7;
+  }
+  .box.warn{background:#fff8e1;border-color:#ffcc80;}
+  .box b{color:#1b5e20;}
+  table{width:100%;border-collapse:collapse;font-size:14.5px;margin:10px 0;}
+  th,td{padding:10px 8px;text-align:center;border-bottom:1px solid #dcedc8;}
+  th{background:#66bb6a;color:#fff;font-weight:800;}
+  th:first-child{border-radius:10px 0 0 0;}
+  th:last-child{border-radius:0 10px 0 0;}
+  tbody tr:nth-child(even){background:#f7fcf4;}
+  .frac{display:inline-flex;flex-direction:column;align-items:center;font-weight:900;line-height:1;vertical-align:middle;}
+  .frac .bar{height:2.5px;width:100%;min-width:22px;background:currentColor;margin:3px 0;border-radius:2px;}
+  .materi-foot{display:flex;gap:12px;justify-content:space-between;flex-wrap:wrap;}
+
+  /* ---------- GAME ---------- */
+  .hud{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap;}
+  .hud-item{
+    background:#fff;border-radius:999px;padding:9px 16px;font-weight:800;font-size:14px;
+    box-shadow:0 5px 14px rgba(0,0,0,.09);color:#2e7d32;white-space:nowrap;
+  }
+  .hud-item.level-badge.easy{background:#e8f5e9;color:#2e7d32;border:2px solid #a5d6a7;}
+  .hud-item.level-badge.medium{background:#fff3e0;color:#e65100;border:2px solid #ffcc80;}
+  .hearts{letter-spacing:2px;font-size:16px;}
+  .question{
+    text-align:center;font-size:clamp(18px,3.2vw,24px);font-weight:800;
+    padding:14px;border-radius:18px;margin-bottom:14px;color:#5d4037;
+    background:linear-gradient(135deg,#fffde7,#ffe082);
+    border:3px dashed #f9a825;
+    box-shadow:0 8px 20px rgba(249,168,37,.25);
+  }
+  .question b{color:#e65100;font-size:1.22em;}
+  .question .hint{font-size:13px;font-weight:700;color:#8d6e63;display:block;margin-top:4px;}
+
+  .field{
+    position:relative;border-radius:24px;min-height:420px;overflow:hidden;
+    background:
+      radial-gradient(circle at 15% 25%, rgba(255,255,255,.6) 0 8%, transparent 9%),
+      radial-gradient(circle at 80% 15%, rgba(255,255,255,.55) 0 6%, transparent 7%),
+      radial-gradient(circle at 45% 50%, rgba(255,255,255,.4) 0 5%, transparent 6%),
+      radial-gradient(circle at 70% 75%, rgba(255,255,255,.45) 0 7%, transparent 8%),
+      linear-gradient(180deg,#a8e0ff 0%,#7ec8f0 40%,#5bb5e8 75%,#4aa8dd 100%);
+    box-shadow:inset 0 5px 24px rgba(0,0,0,.18);
+  }
+
+  .bird{
+    position:absolute;left:0;top:0;
+    border:none;background:transparent;padding:0;cursor:pointer;
+    z-index:5;font-family:inherit;will-change:transform;
+  }
+  .bird-inner{display:flex;flex-direction:column;align-items:center;position:relative;}
+  .bird-sprite{
+    font-size:42px;line-height:1;
+    transform:scaleX(var(--flip,1));
+    filter:drop-shadow(0 4px 6px rgba(0,0,0,.3));
+    transition:transform .2s;
+  }
+  .bird-banner{
+    margin-top:2px;background:#fff;border:3px solid #4e342e;border-radius:12px;
+    padding:3px 13px;font-size:17px;font-weight:900;color:#1b5e20;white-space:nowrap;
+    box-shadow:0 4px 0 rgba(0,0,0,.15);transition:background .2s, border-color .2s;
+  }
+  .bird:hover .bird-banner{background:#fff9c4;border-color:#f57f17;}
+  .bird:hover .bird-sprite{transform:scaleX(var(--flip,1)) scale(1.1);}
+
+  .bird.shake .bird-inner{animation:shakeBird .45s ease;}
+  @keyframes shakeBird{
+    0%,100%{transform:translateX(0) rotate(0)}
+    20%{transform:translateX(-10px) rotate(-6deg)}
+    50%{transform:translateX(10px) rotate(6deg)}
+    80%{transform:translateX(-6px) rotate(-3deg)}
+  }
+  .bird.falling .bird-inner{animation:fallBird 1s cubic-bezier(.4,.6,.7,1) forwards;}
+  @keyframes fallBird{
+    0%{transform:translateY(0) rotate(0);opacity:1}
+    100%{transform:translateY(650px) rotate(540deg);opacity:0}
+  }
+  .bird.reveal .bird-banner{
+    background:#ffd54f;border-color:#e65100;
+    animation:glowBanner 1s ease-in-out infinite alternate;
+  }
+  @keyframes glowBanner{
+    from{box-shadow:0 0 10px #ffd54f,0 0 20px #ffab00;}
+    to{box-shadow:0 0 22px #ffab00,0 0 40px #ffd54f;}
+  }
+
+  .bow{
+    position:absolute;left:50%;bottom:6px;transform:translateX(-50%);
+    font-size:46px;line-height:1;z-index:6;
+    filter:drop-shadow(0 4px 6px rgba(0,0,0,.3));user-select:none;
+  }
+  .arrow{
+    position:absolute;left:50%;bottom:14px;width:36px;height:4px;
+    background:linear-gradient(90deg,#8d6e63,#4e342e);
+    border-radius:2px;transform-origin:left center;
+    opacity:0;pointer-events:none;z-index:8;
+  }
+  .arrow::after{
+    content:'';position:absolute;right:-11px;top:-6px;
+    border-left:13px solid #4e342e;
+    border-top:7px solid transparent;border-bottom:7px solid transparent;
+  }
+
+  .hit-effect{
+    position:absolute;font-size:44px;pointer-events:none;z-index:20;
+    transform:translate(-50%,-50%);animation:hitPop .8s ease-out forwards;
+  }
+  @keyframes hitPop{
+    0%{opacity:0;transform:translate(-50%,-50%) scale(.3)}
+    20%{opacity:1;transform:translate(-50%,-50%) scale(1.3)}
+    100%{opacity:0;transform:translate(-50%,-90%) scale(1)}
+  }
+
+  /* ---------- PANEL PEMBAHASAN ---------- */
+  .explain-panel{
+    display:none;margin-top:14px;border-radius:20px;padding:16px 18px 18px;
+    background:#f1f8e9;border:2px solid #a5d6a7;
+    box-shadow:0 10px 26px rgba(27,94,32,.12);
+  }
+  .explain-panel.show{display:block;animation:fadeIn .3s ease;}
+  .explain-panel.no{background:#ffebee;border-color:#ef9a9a;box-shadow:0 10px 26px rgba(183,28,28,.12);}
+  .explain-head{
+    font-size:18px;font-weight:900;color:#2e7d32;margin-bottom:10px;
+    display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+  }
+  .explain-panel.no .explain-head{color:#c62828;}
+  .explain-line{font-size:16px;line-height:2.05;color:#33513f;margin-bottom:6px;}
+  .explain-line .frac{font-size:18px;color:#1b5e20;}
+  .explain-panel.no .explain-line .frac{color:#b71c1c;}
+  .explain-line .hl{color:#e65100;font-weight:900;font-size:17px;}
+  .explain-tip{
+    font-size:14px;color:#558b2f;font-weight:700;margin:10px 0 14px;
+    background:#f9fbe7;border-radius:10px;padding:9px 12px;line-height:1.55;
+  }
+  .explain-panel.no .explain-tip{background:#fff3e0;color:#8d6e63;}
+  .next-wrap{display:flex;justify-content:flex-end;}
+  .next-btn{animation:breathe 1.8s ease-in-out infinite;}
+  @keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+
+  /* ---------- LEVEL TRANSITION ---------- */
+  .level-card{text-align:center;padding:38px 24px;}
+  .level-emoji{font-size:80px;line-height:1;animation:bob 1.8s ease-in-out infinite;display:inline-block;}
+  .level-card h2{font-size:30px;color:#1b5e20;margin:14px 0 6px;}
+  .level-card p.sub{color:#4e6b5c;font-weight:600;font-size:15px;margin-bottom:18px;}
+  .level-stats{display:flex;gap:16px;justify-content:center;margin:18px 0;flex-wrap:wrap;}
+  .level-stat{background:#f1f8e9;border-radius:16px;padding:14px 24px;min-width:120px;}
+  .stat-label{display:block;font-size:12px;color:#558b2f;font-weight:800;text-transform:uppercase;letter-spacing:1px;}
+  .stat-value{display:block;font-size:28px;font-weight:900;color:#2e7d32;margin-top:4px;}
+  .next-preview{
+    display:inline-flex;align-items:center;gap:14px;
+    background:#fff8e1;border:2px dashed #ffcc80;border-radius:16px;
+    padding:14px 22px;margin-bottom:24px;text-align:left;
+  }
+  .preview-emoji{font-size:34px;}
+  .preview-sub{font-size:13px;color:#8d6e63;font-weight:600;}
+
+  /* ---------- HASIL ---------- */
+  .result{text-align:center;padding:32px 22px;}
+  .result .emoji{font-size:76px;line-height:1;animation:bob 2s ease-in-out infinite;display:inline-block;}
+  .result h2{font-size:28px;color:#1b5e20;margin:10px 0;}
+  .result .score-big{font-size:54px;font-weight:900;color:#43a047;margin:6px 0;letter-spacing:-2px;}
+  .result .stars{font-size:36px;letter-spacing:6px;margin:6px 0 12px;}
+  .result .msg{font-size:15px;color:#4e6b5c;font-weight:600;margin-bottom:22px;line-height:1.6;}
+  .result-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:24px;}
+
+  .review-wrap{
+    text-align:left;max-height:46vh;overflow-y:auto;padding-right:8px;
+    border-top:2px dashed #c8e6c9;margin-top:10px;padding-top:16px;
+  }
+  .review-wrap::-webkit-scrollbar{width:8px;}
+  .review-wrap::-webkit-scrollbar-thumb{background:#a5d6a7;border-radius:8px;}
+  .review-level-head{
+    font-size:15px;font-weight:900;color:#1b5e20;
+    margin:14px 0 10px;padding:8px 12px;
+    background:#e8f5e9;border-radius:10px;
+  }
+  .review-level-head.medium{background:#fff3e0;color:#e65100;}
+  .review-item{
+    background:#f9fbe7;border-radius:14px;padding:12px 14px;margin-bottom:10px;
+    border-left:6px solid #66bb6a;font-size:14px;line-height:1.7;
+  }
+  .review-item.wrong{background:#ffebee;border-left-color:#ef5350;}
+  .review-item.correct{background:#e8f5e9;border-left-color:#43a047;}
+  .review-q{font-weight:800;color:#1b5e20;margin-bottom:6px;}
+  .review-ans{color:#33513f;margin-bottom:6px;}
+  .review-exp{color:#4e6b5c;font-size:13.5px;line-height:1.8;}
+
+  @media (max-width:560px){
+    .card{padding:16px;border-radius:22px;}
+    .field{min-height:380px;}
+    .bird-sprite{font-size:34px;}
+    .bird-banner{font-size:14px;padding:2px 9px;border-width:2px;}
+    .bow{font-size:40px;bottom:4px;}
+    .arrow{bottom:10px;width:30px;}
+    .btn{padding:12px 20px;font-size:14.5px;}
+    .start-btns .btn{font-size:16px;padding:15px 24px;}
+    .hud-item{padding:7px 12px;font-size:12.5px;}
+    .review-wrap{max-height:38vh;}
+    .explain-line{font-size:15px;line-height:1.95;}
+    .level-card h2{font-size:24px;}
+    .level-emoji{font-size:64px;}
+    .grade-badge{font-size:13.5px;padding:7px 16px;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= START (SAMPUL) ================= -->
+<section id="startScreen" class="screen active">
+  <div class="card start">
+    <div class="archery-logo">🏹</div>
+    <h1>Archery Fraction</h1>
+    <p class="sub">Buruan Burung Jawaban — Mengubah <b>Desimal</b> ke <b>Pecahan</b></p>
+
+    <div class="grade-badge">🎓 Untuk SD Kelas 4</div>
+
+    <div class="level-chips">
+      <span class="chip easy">📗 Level 1 · Mudah · 10 soal</span>
+      <span class="chip medium">📙 Level 2 · Sedang · 10 soal</span>
+    </div>
+
+    <div class="fresh-note">🔄 Soal selalu berbeda di setiap permainan baru</div>
+
+    <div class="start-btns">
+      <button class="btn btn-materi" onclick="showScreen('materiScreen')">📚 Materi</button>
+      <button class="btn btn-play" onclick="startGame()">🏹 Play Game</button>
+    </div>
+
+    <div class="credit">
+      <span class="credit-icon">✍️</span> Design By : <b>Den's</b>
+    </div>
+  </div>
+</section>
+
+<!-- ================= MATERI ================= -->
+<section id="materiScreen" class="screen">
+  <div class="card materi-card">
+    <h2>📚 Ringkasan Materi: Desimal → Pecahan</h2>
+    <div class="materi-body">
+
+      <section>
+        <h3>1. Kunci Utamanya: Nilai Tempat</h3>
+        <p>Banyaknya angka di belakang koma menentukan <b>penyebut</b> pecahannya.</p>
+        <div class="box">
+          <ul style="margin-left:16px">
+            <li>1 angka di belakang koma → penyebut <b>10</b></li>
+            <li>2 angka di belakang koma → penyebut <b>100</b></li>
+            <li>3 angka di belakang koma → penyebut <b>1.000</b></li>
+          </ul>
+        </div>
+      </section>
+
+      <section>
+        <h3>2. Tiga Langkah Mudah</h3>
+        <div class="box">
+          <p><b>Langkah 1.</b> Tulis angka di belakang koma sebagai pembilang, dan tentukan penyebut (10 / 100 / 1.000) sesuai jumlah angka di belakang koma.</p>
+          <p><b>Langkah 2.</b> Sederhanakan pecahan dengan membagi pembilang dan penyebut dengan <b>FPB</b>-nya.</p>
+          <p><b>Langkah 3.</b> Jika ada bilangan bulat di depan koma, pisahkan lalu gabungkan kembali.</p>
+        </div>
+      </section>
+
+      <section>
+        <h3>3. Contoh Lengkap</h3>
+        <table>
+          <thead>
+            <tr><th>Desimal</th><th>Pecahan Awal</th><th>Sederhanakan</th><th>Hasil</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><b>0,5</b></td><td>5/10</td><td>bagi 5</td><td><b>1/2</b></td></tr>
+            <tr><td><b>0,25</b></td><td>25/100</td><td>bagi 25</td><td><b>1/4</b></td></tr>
+            <tr><td><b>0,75</b></td><td>75/100</td><td>bagi 25</td><td><b>3/4</b></td></tr>
+            <tr><td><b>0,4</b></td><td>4/10</td><td>bagi 2</td><td><b>2/5</b></td></tr>
+            <tr><td><b>0,125</b></td><td>125/1000</td><td>bagi 125</td><td><b>1/8</b></td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section>
+        <h3>4. Contoh Soal & Pembahasan</h3>
+        <div class="box">
+          <p><b>Soal 1:</b> Ubah 0,75 menjadi pecahan.</p>
+          <p><b>Pembahasan:</b> 0,75 memiliki 2 angka di belakang koma → 75/100. FPB dari 75 dan 100 adalah 25. Maka 75/100 = <b>3/4</b>.</p>
+        </div>
+        <div class="box">
+          <p><b>Soal 2:</b> Ubah 0,125 menjadi pecahan.</p>
+          <p><b>Pembahasan:</b> 0,125 memiliki 3 angka di belakang koma → 125/1000. FPB dari 125 dan 1000 adalah 125. Maka 125/1000 = <b>1/8</b>.</p>
+        </div>
+        <div class="box">
+          <p><b>Soal 3:</b> Ubah 2,5 menjadi pecahan.</p>
+          <p><b>Pembahasan:</b> 2,5 = 25/10. FPB dari 25 dan 10 adalah 5. Maka 25/10 = <b>5/2</b> atau <b>2 1/2</b>.</p>
+        </div>
+      </section>
+
+      <section>
+        <h3>5. Tips Cek Jawaban ✅</h3>
+        <div class="box warn">
+          <p>Bagi pembilang dengan penyebut — hasilnya harus sama dengan desimal soal!</p>
+          <p>Contoh: <b>3/4</b> → 3 ÷ 4 = <b>0,75</b> ✔️</p>
+          <p>Contoh: <b>1/8</b> → 1 ÷ 8 = <b>0,125</b> ✔️</p>
+        </div>
+      </section>
+
+      <section>
+        <h3>6. Hati-hati!</h3>
+        <div class="box warn">
+          <p>❌ 0,5 = 1/5 &nbsp;&nbsp;(salah — ini artinya 0,2)</p>
+          <p>✅ 0,5 = 5/10 = <b>1/2</b></p>
+          <p>Ingat: 1 angka di belakang koma → <b>per 10</b>, bukan per 5.</p>
+        </div>
+      </section>
+
+    </div>
+    <div class="materi-foot">
+      <button class="btn btn-ghost" onclick="showScreen('startScreen')">⬅ Kembali</button>
+      <button class="btn btn-play" onclick="startGame()">🏹 Main Game</button>
+    </div>
+  </div>
+</section>
+
+<!-- ================= GAME ================= -->
+<section id="gameScreen" class="screen">
+  <div class="card">
+    <div class="hud">
+      <div class="hud-item level-badge easy" id="levelBadge">📗 Mudah</div>
+      <div class="hud-item">⭐ <span id="scoreVal">0</span></div>
+      <div class="hud-item">🎯 <span id="qVal">1</span>/<span id="qTotal">10</span></div>
+      <div class="hud-item hearts" id="livesVal">❤️❤️❤️</div>
+    </div>
+
+    <div class="question" id="questionBox">Ubah <b>0,5</b> menjadi pecahan!
+      <span class="hint">Tembak burung yang membawa jawaban benar!</span>
+    </div>
+
+    <div class="field" id="field">
+      <div class="bow">🏹</div>
+      <div class="arrow" id="arrow"></div>
+    </div>
+
+    <div class="explain-panel" id="explainPanel"></div>
+  </div>
+</section>
+
+<!-- ================= LEVEL TRANSITION ================= -->
+<section id="levelScreen" class="screen">
+  <div class="card level-card">
+    <div class="level-emoji">🎉</div>
+    <h2 id="levelTitle">Level 1 Selesai!</h2>
+    <p class="sub" id="levelSub">Kerja bagus! Kamu menyelesaikan level mudah.</p>
+    <div class="level-stats">
+      <div class="level-stat">
+        <span class="stat-label">Benar</span>
+        <span class="stat-value" id="levelCorrectVal">0/10</span>
+      </div>
+      <div class="level-stat">
+        <span class="stat-label">Skor</span>
+        <span class="stat-value" id="levelScoreVal">0</span>
+      </div>
+    </div>
+    <div class="next-preview">
+      <span class="preview-emoji">📙</span>
+      <div>
+        <b>Level 2 — Sedang</b><br>
+        <span class="preview-sub">10 soal baru · +15 poin/soal · ❤️ dipulihkan</span>
+      </div>
+    </div>
+    <button class="btn btn-play" onclick="continueToNextLevel()">Lanjut ke Level 2 ➡</button>
+  </div>
+</section>
+
+<!-- ================= HASIL ================= -->
+<section id="resultScreen" class="screen">
+  <div class="card result">
+    <div class="emoji" id="resultEmoji">🏆</div>
+    <h2 id="resultTitle">Hebat!</h2>
+    <div class="score-big" id="resultScore">0</div>
+    <div class="stars" id="resultStars">⭐⭐⭐</div>
+    <p class="msg" id="resultMsg">Kamu berhasil mengubah desimal ke pecahan!</p>
+    <div class="result-btns">
+      <button class="btn btn-materi" onclick="showScreen('materiScreen')">📚 Materi</button>
+      <button class="btn btn-play" onclick="startGame()">🔁 Main Lagi</button>
+      <button class="btn btn-ghost" onclick="showScreen('startScreen')">🏠 Menu</button>
+    </div>
+
+    <div class="review-wrap" id="reviewWrap">
+      <div class="review-title" style="font-size:18px;font-weight:900;color:#1b5e20;margin-bottom:12px;text-align:center;">📝 Soal & Pembahasan</div>
+      <div id="reviewList"></div>
+    </div>
+  </div>
+</section>
+
+<script>
+/* ==================== DATA SOAL ==================== */
+/* ===== Level 1 — Mudah: 20 soal (persepuluhan & perdua-puluh, sesuai SD Kelas 4) ===== */
+const EASY_POOL = [
+  {dec:'0,5',  num:1, den:2},
+  {dec:'0,2',  num:1, den:5},
+  {dec:'0,4',  num:2, den:5},
+  {dec:'0,6',  num:3, den:5},
+  {dec:'0,8',  num:4, den:5},
+  {dec:'0,25', num:1, den:4},
+  {dec:'0,75', num:3, den:4},
+  {dec:'0,1',  num:1, den:10},
+  {dec:'0,3',  num:3, den:10},
+  {dec:'0,7',  num:7, den:10},
+  {dec:'0,9',  num:9, den:10},
+  {dec:'0,05', num:1, den:20},
+  {dec:'0,15', num:3, den:20},
+  {dec:'0,35', num:7, den:20},
+  {dec:'0,45', num:9, den:20},
+  {dec:'0,04', num:1, den:25},
+  {dec:'0,08', num:2, den:25},
+  {dec:'0,12', num:3, den:25},
+  {dec:'0,16', num:4, den:25},
+  {dec:'0,24', num:6, den:25}
+];
+
+/* ===== Level 2 — Sedang: 20 soal (perdelapan & bilangan bulat + pecahan) ===== */
+const MEDIUM_POOL = [
+  {dec:'0,125', num:1, den:8},
+  {dec:'0,375', num:3, den:8},
+  {dec:'0,625', num:5, den:8},
+  {dec:'0,875', num:7, den:8},
+  {dec:'1,5',   num:3, den:2},
+  {dec:'2,5',   num:5, den:2},
+  {dec:'3,5',   num:7, den:2},
+  {dec:'4,5',   num:9, den:2},
+  {dec:'1,25',  num:5, den:4},
+  {dec:'1,75',  num:7, den:4},
+  {dec:'2,25',  num:9, den:4},
+  {dec:'2,75',  num:11, den:4},
+  {dec:'3,25',  num:13, den:4},
+  {dec:'1,2',   num:6, den:5},
+  {dec:'1,4',   num:7, den:5},
+  {dec:'1,6',   num:8, den:5},
+  {dec:'1,8',   num:9, den:5},
+  {dec:'1,1',   num:11, den:10},
+  {dec:'1,3',   num:13, den:10},
+  {dec:'1,9',   num:19, den:10}
+];
+
+/* Kumpulan semua pecahan untuk pilihan pengecoh */
+const ALL_FRACTIONS = [...EASY_POOL, ...MEDIUM_POOL];
+
+const QUESTIONS_PER_LEVEL = 10;
+const POINTS_PER_LEVEL = [10, 15];
+const LEVEL_NAMES = ['Mudah', 'Sedang'];
+const LEVEL_ICONS = ['📗', '📙'];
+
+/* Kunci localStorage untuk melacak soal yang baru saja dipakai */
+const STORAGE_EASY = 'archery_frac_easy_last';
+const STORAGE_MED  = 'archery_frac_med_last';
+
+/* ==================== STATE ==================== */
+const state = {
+  level: 0,
+  score: 0,
+  lives: 3,
+  qIndex: 0,
+  correctCount: 0,
+  queue: [],
+  current: null,
+  locked: true,
+  history: []
+};
+
+/* ==================== ELEMEN ==================== */
+const fieldEl    = document.getElementById('field');
+const arrowEl    = document.getElementById('arrow');
+const questionEl = document.getElementById('questionBox');
+const scoreEl    = document.getElementById('scoreVal');
+const qEl        = document.getElementById('qVal');
+const livesEl    = document.getElementById('livesVal');
+const panelEl    = document.getElementById('explainPanel');
+const levelBadge = document.getElementById('levelBadge');
+
+document.getElementById('qTotal').textContent = QUESTIONS_PER_LEVEL;
+
+/* ==================== NAVIGASI ==================== */
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+/* ==================== SUARA ==================== */
+let audioCtx = null;
+function playSound(type){
+  try{
+    audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+    if(audioCtx.state === 'suspended') audioCtx.resume();
+    const now = audioCtx.currentTime;
+    const o = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    o.connect(g); g.connect(audioCtx.destination);
+
+    if(type === 'correct'){
+      o.type = 'sine';
+      o.frequency.setValueAtTime(523, now);
+      o.frequency.setValueAtTime(784, now + 0.09);
+      o.frequency.setValueAtTime(1047, now + 0.18);
+      g.gain.setValueAtTime(0.14, now);
+      g.gain.exponentialRampToValueAtTime(0.001, now + 0.34);
+      o.start(now); o.stop(now + 0.35);
+    } else if(type === 'wrong'){
+      o.type = 'square';
+      o.frequency.setValueAtTime(240, now);
+      o.frequency.exponentialRampToValueAtTime(110, now + 0.25);
+      g.gain.setValueAtTime(0.10, now);
+      g.gain.exponentialRampToValueAtTime(0.001, now + 0.30);
+      o.start(now); o.stop(now + 0.31);
+    } else {
+      o.type = 'triangle';
+      o.frequency.setValueAtTime(660, now);
+      o.frequency.setValueAtTime(880, now + 0.12);
+      g.gain.setValueAtTime(0.12, now);
+      g.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+      o.start(now); o.stop(now + 0.41);
+    }
+  }catch(e){}
+}
+
+/* ==================== UTIL ==================== */
+function shuffle(arr){
+  const a = [...arr];
+  for(let i = a.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+function fracHTML(num, den){
+  return `<span class="frac"><span>${num}</span><span class="bar"></span><span>${den}</span></span>`;
+}
+function keyOf(o){ return o.num + '/' + o.den; }
+function gcd(a, b){ return b ? gcd(b, a % b) : a; }
+function valueOf(o){ return o.num / o.den; }
+
+/* ==================== PENYIMPANAN SOAL (agar selalu beda) ==================== */
+function safeGet(key){
+  try { return JSON.parse(localStorage.getItem(key) || '[]'); }
+  catch(e){ return []; }
+}
+function safeSet(key, val){
+  try { localStorage.setItem(key, JSON.stringify(val)); }
+  catch(e){}
+}
+
+/* Pilih 10 soal dari pool, utamakan yang TIDAK dipakai pada permainan sebelumnya.
+   Simpan hasil pilihan sebagai "soal terpakai" agar permainan berikutnya
+   otomatis mendapat soal yang berbeda. */
+function pickQuestions(pool, count, storageKey){
+  const lastUsed = safeGet(storageKey);
+  const unused = pool.filter(q => !lastUsed.includes(q.dec));
+  const usedOnes = pool.filter(q => lastUsed.includes(q.dec));
+
+  let picked;
+  if(unused.length >= count){
+    // Idealnya: ambil semua dari yang belum dipakai
+    picked = shuffle(unused).slice(0, count);
+  } else {
+    // Jika sisa soal belum dipakai kurang dari 10, ambil sisanya
+    // lalu lengkapi dari soal lama (yang paling jarang dipakai)
+    picked = [...unused, ...shuffle(usedOnes).slice(0, count - unused.length)];
+  }
+
+  safeSet(storageKey, picked.map(q => q.dec));
+  return shuffle(picked);
+}
+
+/* ==================== BUAT OPSI JAWABAN ==================== */
+function makeOptions(answer){
+  const options = [answer];
+  const usedKeys = new Set([keyOf(answer)]);
+  const usedValues = new Set([valueOf(answer)]);
+
+  const candidates = shuffle(ALL_FRACTIONS).filter(c =>
+    !usedKeys.has(keyOf(c)) && !usedValues.has(valueOf(c))
+  );
+
+  for(const c of candidates){
+    if(options.length >= 4) break;
+    const k = keyOf(c);
+    const v = valueOf(c);
+    if(usedKeys.has(k) || usedValues.has(v)) continue;
+    usedKeys.add(k);
+    usedValues.add(v);
+    options.push(c);
+  }
+  return shuffle(options);
+}
+
+/* ==================== PEMBAHASAN ==================== */
+function explainRich(dec, ansNum, ansDen){
+  const clean = dec.replace(',', '.');
+  const [intPart, decPart = ''] = clean.split('.');
+  const digits = decPart.length;
+  const rawNum = parseInt(intPart + decPart, 10);
+  const rawDen = Math.pow(10, digits);
+  const g = gcd(rawNum, rawDen);
+
+  let s = `Ubah dulu: <b>${dec}</b> punya <span class="hl">${digits}</span> angka di belakang koma, ` +
+          `jadi penyebutnya <span class="hl">${rawDen.toLocaleString('id-ID')}</span> → ` +
+          `${fracHTML(rawNum, rawDen)}.`;
+
+  if(g > 1){
+    s += `<br>Sederhanakan dengan membagi pembilang &amp; penyebut dengan FPB <span class="hl">${g}</span> ` +
+         `→ ${fracHTML(ansNum, ansDen)}.`;
+  } else {
+    s += `<br>Pecahan ${fracHTML(rawNum, rawDen)} sudah paling sederhana.`;
+  }
+  s += `<br><b>Jadi, ${dec} = ${fracHTML(ansNum, ansDen)}</b>`;
+  return s;
+}
+
+/* ==================== BURUNG & ANIMASI ==================== */
+let birds = [];
+let rafId = null;
+let lastTime = 0;
+const LANE_BANDS = [0.02, 0.19, 0.36, 0.53];
+
+function spawnBirds(question){
+  birds.forEach(b => b.el.remove());
+  birds = [];
+
+  const W = fieldEl.clientWidth || 800;
+  const H = fieldEl.clientHeight || 420;
+
+  question.options.forEach((opt, i) => {
+    const el = document.createElement('button');
+    el.className = 'bird';
+    el.setAttribute('aria-label', `Pecahan ${opt.num} per ${opt.den}`);
+    el.innerHTML = `
+      <div class="bird-inner">
+        <span class="bird-sprite">🐦</span>
+        <span class="bird-banner">${fracHTML(opt.num, opt.den)}</span>
+      </div>
+    `;
+    fieldEl.appendChild(el);
+
+    const direction = i % 2 === 0 ? 1 : -1;
+    const baseY = H * LANE_BANDS[i];
+    const startX = 20 + i * ((W - 140) / 3);
+
+    const bird = {
+      el, opt,
+      x: startX, baseY,
+      speed: 52 + Math.random() * 34,
+      direction,
+      phase: Math.random() * Math.PI * 2,
+      frozen: false,
+      alive: true
+    };
+
+    el.style.setProperty('--flip', direction === 1 ? 1 : -1);
+    el.addEventListener('click', () => onBirdClick(bird));
+    birds.push(bird);
+  });
+
+  startAnimation();
+}
+
+function startAnimation(){
+  if(rafId) cancelAnimationFrame(rafId);
+  lastTime = 0;
+  rafId = requestAnimationFrame(animateBirds);
+}
+
+function stopAnimation(){
+  if(rafId){ cancelAnimationFrame(rafId); rafId = null; }
+}
+
+function animateBirds(t){
+  const now = t / 1000;
+  const dt = lastTime ? Math.min(now - lastTime, 0.08) : 0;
+  lastTime = now;
+  const W = fieldEl.clientWidth;
+
+  birds.forEach(bird => {
+    if(!bird.alive || bird.frozen) return;
+    bird.x += bird.speed * bird.direction * dt;
+    bird.phase += dt * 3.2;
+    const bobY = Math.sin(bird.phase) * 6;
+
+    if(bird.direction === 1 && bird.x > W + 150){
+      bird.x = -150; bird.phase = Math.random() * Math.PI * 2;
+    } else if(bird.direction === -1 && bird.x < -150){
+      bird.x = W + 150; bird.phase = Math.random() * Math.PI * 2;
+    }
+
+    bird.el.style.transform = `translate(${bird.x}px, ${bird.baseY + bobY}px)`;
+  });
+
+  rafId = requestAnimationFrame(animateBirds);
+}
+
+/* ==================== KLIK & TEMBAK ==================== */
+function onBirdClick(bird){
+  if(state.locked || !bird.alive) return;
+  state.locked = true;
+  birds.forEach(b => b.frozen = true);
+  shootArrow(bird);
+}
+
+function shootArrow(bird){
+  const fieldRect = fieldEl.getBoundingClientRect();
+  const birdRect  = bird.el.getBoundingClientRect();
+
+  const startX = fieldRect.width / 2;
+  const startY = fieldRect.height - 16;
+  const targetX = birdRect.left - fieldRect.left + birdRect.width / 2;
+  const targetY = birdRect.top  - fieldRect.top  + birdRect.height / 2;
+
+  const dx = targetX - startX;
+  const dy = targetY - startY;
+  const angleRad = Math.atan2(dy, dx);
+  const arrowLen = 36;
+  const dxAdj = dx - arrowLen * Math.cos(angleRad);
+  const dyAdj = dy - arrowLen * Math.sin(angleRad);
+  const angleDeg = angleRad * 180 / Math.PI;
+
+  arrowEl.style.transition = 'none';
+  arrowEl.style.transform = 'translate(0, 0) rotate(0deg)';
+  arrowEl.style.opacity = '1';
+  void arrowEl.offsetWidth;
+
+  arrowEl.style.transition = 'transform 0.42s cubic-bezier(.3,.7,.4,1), opacity 0.15s ease 0.35s';
+  arrowEl.style.transform = `translate(${dxAdj}px, ${dyAdj}px) rotate(${angleDeg}deg)`;
+
+  setTimeout(() => {
+    arrowEl.style.opacity = '0';
+    onArrowHit(bird);
+  }, 430);
+}
+
+function resetArrow(){
+  arrowEl.style.transition = 'none';
+  arrowEl.style.transform = 'translate(0, 0) rotate(0deg)';
+  arrowEl.style.opacity = '0';
+  void arrowEl.offsetWidth;
+}
+
+function showHitEffect(bird, isCorrect){
+  const fieldRect = fieldEl.getBoundingClientRect();
+  const birdRect  = bird.el.getBoundingClientRect();
+
+  const el = document.createElement('div');
+  el.className = 'hit-effect';
+  el.textContent = isCorrect ? '💥' : '❌';
+  el.style.left = (birdRect.left - fieldRect.left + birdRect.width / 2) + 'px';
+  el.style.top  = (birdRect.top  - fieldRect.top  + birdRect.height / 2) + 'px';
+  fieldEl.appendChild(el);
+  setTimeout(() => el.remove(), 800);
+}
+
+/* ==================== PANAH MENGENAI BURUNG ==================== */
+function onArrowHit(bird){
+  const q = state.current;
+  const ans = q.answer;
+  const chosen = bird.opt;
+  const isCorrect = (chosen.num === ans.num && chosen.den === ans.den);
+
+  showHitEffect(bird, isCorrect);
+
+  state.history.push({
+    level: state.level,
+    qNum: state.qIndex + 1,
+    dec: q.answer.dec,
+    userNum: chosen.num,
+    userDen: chosen.den,
+    ansNum: ans.num,
+    ansDen: ans.den,
+    correct: isCorrect,
+    explanation: explainRich(q.answer.dec, ans.num, ans.den)
+  });
+
+  if(isCorrect){
+    state.score += POINTS_PER_LEVEL[state.level];
+    state.correctCount++;
+    bird.alive = false;
+    bird.el.classList.add('falling');
+    playSound('correct');
+    updateHUD();
+    setTimeout(() => { if(bird.el.parentNode) bird.el.remove(); }, 1100);
+  } else {
+    state.lives--;
+    bird.el.classList.add('shake');
+    playSound('wrong');
+    updateHUD();
+    setTimeout(() => bird.el.classList.remove('shake'), 500);
+    setTimeout(() => {
+      const correctBird = birds.find(b => b.opt.num === ans.num && b.opt.den === ans.den);
+      if(correctBird) correctBird.el.classList.add('reveal');
+    }, 500);
+  }
+
+  setTimeout(() => showExplainPanel(isCorrect, q, chosen), 550);
+}
+
+/* ==================== HUD ==================== */
+function updateHUD(){
+  scoreEl.textContent = state.score;
+  qEl.textContent = Math.min(state.qIndex + 1, QUESTIONS_PER_LEVEL);
+  livesEl.textContent = '❤️'.repeat(Math.max(state.lives, 0)) +
+                        '🖤'.repeat(Math.max(3 - state.lives, 0));
+
+  levelBadge.textContent = LEVEL_ICONS[state.level] + ' ' + LEVEL_NAMES[state.level];
+  levelBadge.className = 'hud-item level-badge ' + (state.level === 0 ? 'easy' : 'medium');
+}
+
+/* ==================== LABEL TOMBOL ==================== */
+function nextLabel(){
+  if(state.lives <= 0) return 'Lihat Hasil 🏆';
+  if(state.qIndex + 1 >= QUESTIONS_PER_LEVEL){
+    if(state.level === 0) return 'Selesai Level 1 ➡';
+    return 'Lihat Hasil 🏆';
+  }
+  return 'Lanjut ➡';
+}
+
+/* ==================== PANEL PEMBAHASAN ==================== */
+function showExplainPanel(isCorrect, q, chosen){
+  const ans = q.answer;
+  const rich = explainRich(q.answer.dec, ans.num, ans.den);
+  const pts = POINTS_PER_LEVEL[state.level];
+
+  panelEl.className = 'explain-panel show' + (isCorrect ? '' : ' no');
+  panelEl.innerHTML = `
+    <div class="explain-head">
+      ${isCorrect
+        ? `✅ Tembakan Tepat! &nbsp;<span style="font-size:15px">(+${pts} poin)</span>`
+        : '❌ Belum tepat. Yuk perhatikan pembahasannya!'}
+    </div>
+    ${isCorrect ? '' : `
+      <div class="explain-line" style="margin-bottom:10px">
+        Jawabanmu ${fracHTML(chosen.num, chosen.den)} &nbsp;→&nbsp;
+        Jawaban benar <b>${fracHTML(ans.num, ans.den)}</b>
+      </div>`}
+    <div class="explain-line">${rich}</div>
+    <div class="explain-tip">💡 Tips: cek dengan membagi pembilang dengan penyebut. Hasilnya harus ${q.answer.dec}.</div>
+    <div class="next-wrap">
+      <button class="btn btn-play next-btn" id="nextBtn">${nextLabel()}</button>
+    </div>
+  `;
+
+  document.getElementById('nextBtn').addEventListener('click', advance);
+  setTimeout(() => panelEl.scrollIntoView({behavior:'smooth', block:'nearest'}), 120);
+}
+
+function hideExplainPanel(){
+  panelEl.classList.remove('show');
+  panelEl.innerHTML = '';
+}
+
+/* ==================== LANJUT ==================== */
+function advance(){
+  hideExplainPanel();
+
+  if(state.lives <= 0){
+    endGame('lives');
+    return;
+  }
+
+  state.qIndex++;
+
+  if(state.qIndex >= QUESTIONS_PER_LEVEL){
+    if(state.level === 0){
+      showLevelTransition();
+    } else {
+      endGame('complete');
+    }
+    return;
+  }
+
+  loadQuestion();
+}
+
+/* ==================== MUAT SOAL ==================== */
+function loadQuestion(){
+  state.locked = false;
+  resetArrow();
+
+  const q = state.queue[state.qIndex];
+  state.current = {
+    answer: q,
+    options: makeOptions(q)
+  };
+
+  questionEl.innerHTML = `Ubah <b>${q.dec}</b> menjadi pecahan!
+    <span class="hint">Tembak burung yang membawa jawaban benar!</span>`;
+
+  updateHUD();
+  spawnBirds(state.current);
+}
+
+/* ==================== MULAI GAME ==================== */
+function startGame(){
+  state.level = 0;
+  state.score = 0;
+  state.lives = 3;
+  state.qIndex = 0;
+  state.correctCount = 0;
+  state.history = [];
+  state.current = null;
+  state.locked = true;
+
+  // Ambil 10 soal unik yang berbeda dari permainan sebelumnya
+  state.queue = pickQuestions(EASY_POOL, QUESTIONS_PER_LEVEL, STORAGE_EASY);
+
+  resetArrow();
+  hideExplainPanel();
+  birds.forEach(b => b.el.remove());
+  birds = [];
+
+  showScreen('gameScreen');
+  updateHUD();
+
+  setTimeout(() => loadQuestion(), 200);
+}
+
+/* ==================== TRANSISI LEVEL ==================== */
+function showLevelTransition(){
+  stopAnimation();
+  state.locked = true;
+
+  const levelHistory = state.history.filter(h => h.level === 0);
+  const correctInLevel = levelHistory.filter(h => h.correct).length;
+
+  document.getElementById('levelTitle').textContent = 'Level 1 Selesai!';
+  document.getElementById('levelSub').textContent = correctInLevel >= 8
+    ? 'Luar biasa! Kamu sangat siap untuk level sedang.'
+    : 'Kerja bagus! Sekarang coba level yang lebih menantang, ya.';
+  document.getElementById('levelCorrectVal').textContent = correctInLevel + '/' + QUESTIONS_PER_LEVEL;
+  document.getElementById('levelScoreVal').textContent = state.score;
+
+  playSound('finish');
+  showScreen('levelScreen');
+}
+
+function continueToNextLevel(){
+  state.level = 1;
+  state.qIndex = 0;
+  state.lives = 3;
+
+  // Ambil 10 soal medium yang berbeda dari permainan sebelumnya
+  state.queue = pickQuestions(MEDIUM_POOL, QUESTIONS_PER_LEVEL, STORAGE_MED);
+
+  resetArrow();
+  hideExplainPanel();
+  birds.forEach(b => b.el.remove());
+  birds = [];
+
+  showScreen('gameScreen');
+  updateHUD();
+
+  setTimeout(() => loadQuestion(), 200);
+}
+
+/* ==================== AKHIR GAME ==================== */
+function endGame(reason){
+  state.locked = true;
+  stopAnimation();
+  playSound('finish');
+
+  const answered = state.history.length;
+  const correct = state.history.filter(h => h.correct).length;
+  const rate = answered > 0 ? correct / answered : 0;
+  const completed = (reason === 'complete');
+
+  let stars = 1, emoji = '🌱', title = 'Terus Semangat!', msg = '';
+  if(completed && rate >= 0.8){
+    stars = 3; emoji = '🏆'; title = 'Luar Biasa!';
+    msg = 'Kamu menyelesaikan kedua level dengan sangat baik!';
+  } else if(completed){
+    stars = 2; emoji = '🌟'; title = 'Hebat!';
+    msg = 'Kamu berhasil menyelesaikan kedua level. Pertahankan!';
+  } else if(rate >= 0.6){
+    stars = 2; emoji = '💪'; title = 'Hampir Berhasil!';
+    msg = 'Nyawa habis, tapi jawabanmu sudah bagus. Coba lagi ya!';
+  } else {
+    stars = 1; emoji = '😅'; title = 'Nyawa Habis!';
+    msg = 'Jangan menyerah! Baca materi dulu, lalu main lagi.';
+  }
+
+  if(reason === 'lives' && state.level === 0){
+    msg += ' Kamu berhenti di Level 1 (Mudah).';
+  } else if(reason === 'lives' && state.level === 1){
+    msg += ' Kamu berhenti di Level 2 (Sedang).';
+  }
+  if(completed){
+    msg += ' Tekan "Main Lagi" untuk mendapat soal yang berbeda.';
+  }
+
+  document.getElementById('resultEmoji').textContent = emoji;
+  document.getElementById('resultTitle').textContent = title;
+  document.getElementById('resultScore').textContent = state.score;
+  document.getElementById('resultStars').textContent = '⭐'.repeat(stars) + '☆'.repeat(3 - stars);
+  document.getElementById('resultMsg').textContent =
+    `${msg} Jawaban benar: ${correct} dari ${answered} soal.`;
+
+  const reviewList = document.getElementById('reviewList');
+  let html = '';
+  let lastLevel = -1;
+
+  state.history.forEach(h => {
+    if(h.level !== lastLevel){
+      lastLevel = h.level;
+      const cls = h.level === 1 ? 'review-level-head medium' : 'review-level-head';
+      html += `<div class="${cls}">${LEVEL_ICONS[h.level]} Level ${h.level + 1} — ${LEVEL_NAMES[h.level]}</div>`;
+    }
+    const status = h.correct ? '✔️ Benar' : '❌ Salah';
+    html += `
+      <div class="review-item ${h.correct ? 'correct' : 'wrong'}">
+        <div class="review-q">Soal ${h.qNum}: Ubah <b>${h.dec}</b> menjadi pecahan</div>
+        <div class="review-ans">
+          Jawabanmu: ${fracHTML(h.userNum, h.userDen)} &nbsp;<b>${status}</b> &nbsp;|&nbsp;
+          Jawaban benar: ${fracHTML(h.ansNum, h.ansDen)}
+        </div>
+        <div class="review-exp">📝 Pembahasan: ${h.explanation}</div>
+      </div>
+    `;
+  });
+
+  reviewList.innerHTML = html;
+  showScreen('resultScreen');
+}
+</script>
+</body>
+</html>
